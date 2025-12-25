@@ -407,7 +407,7 @@ export default function Index() {
 
       <footer className="border-t border-border py-8 px-4">
         <div className="container mx-auto text-center text-muted-foreground">
-          <p>© 2024 CS2 ANIME SERVER. Все права защищены.</p>
+          <p>© 2025 CS2 СOMEBACK SERVER. Все права защищены.</p>
         </div>
       </footer>
     </div>
