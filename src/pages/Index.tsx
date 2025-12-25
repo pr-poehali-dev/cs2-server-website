@@ -13,6 +13,18 @@ interface SteamUser {
   level: number;
 }
 
+interface Server {
+  id: string;
+  name: string;
+  map: string;
+  players: number;
+  maxPlayers: number;
+  mode: string;
+  status: 'online' | 'full' | 'offline';
+  ip: string;
+  ping: number;
+}
+
 export default function Index() {
   const [activeSection, setActiveSection] = useState('home');
   const [user, setUser] = useState<SteamUser | null>(null);
@@ -51,6 +63,7 @@ export default function Index() {
   const navItems = [
     { id: 'home', label: 'Главная', icon: 'Home' },
     { id: 'about', label: 'О сервере', icon: 'Info' },
+    { id: 'servers', label: 'Серверы', icon: 'Server' },
     { id: 'rules', label: 'Правила', icon: 'BookOpen' },
     { id: 'donate', label: 'Донат', icon: 'CreditCard' },
     { id: 'news', label: 'Новости', icon: 'Newspaper' },
@@ -120,6 +133,83 @@ export default function Index() {
     { icon: 'Mic', title: 'Голосовой чат', description: 'Используйте микрофон для командной игры, спам запрещен' },
     { icon: 'Ban', title: 'Нет гриферства', description: 'Намеренная порча игры союзников карается баном' },
   ];
+
+  const servers: Server[] = [
+    {
+      id: '1',
+      name: '🔥 CS2 ANIME | Deathmatch #1',
+      map: 'de_dust2',
+      players: 24,
+      maxPlayers: 32,
+      mode: 'Deathmatch',
+      status: 'online',
+      ip: '185.248.100.25:27015',
+      ping: 12,
+    },
+    {
+      id: '2',
+      name: '⚡ CS2 ANIME | Competitive #1',
+      map: 'de_mirage',
+      players: 10,
+      maxPlayers: 10,
+      mode: 'Competitive',
+      status: 'full',
+      ip: '185.248.100.25:27016',
+      ping: 15,
+    },
+    {
+      id: '3',
+      name: '💫 CS2 ANIME | AWP Only #1',
+      map: 'awp_lego_2',
+      players: 18,
+      maxPlayers: 24,
+      mode: 'AWP Only',
+      status: 'online',
+      ip: '185.248.100.25:27017',
+      ping: 18,
+    },
+    {
+      id: '4',
+      name: '🌸 CS2 ANIME | Surf #1',
+      map: 'surf_kitsune',
+      players: 14,
+      maxPlayers: 20,
+      mode: 'Surf',
+      status: 'online',
+      ip: '185.248.100.25:27018',
+      ping: 20,
+    },
+    {
+      id: '5',
+      name: '🎯 CS2 ANIME | Aim Arena #1',
+      map: 'aim_redline',
+      players: 8,
+      maxPlayers: 16,
+      mode: 'Aim Arena',
+      status: 'online',
+      ip: '185.248.100.25:27019',
+      ping: 14,
+    },
+    {
+      id: '6',
+      name: '🎪 CS2 ANIME | Retake #1',
+      map: 'de_inferno',
+      players: 16,
+      maxPlayers: 20,
+      mode: 'Retake',
+      status: 'online',
+      ip: '185.248.100.25:27020',
+      ping: 16,
+    },
+  ];
+
+  const handleConnectServer = (ip: string) => {
+    window.open(`steam://connect/${ip}`, '_self');
+  };
+
+  const handleCopyIP = (ip: string) => {
+    navigator.clipboard.writeText(ip);
+  };
 
   return (
     <div className="min-h-screen bg-background font-body">
@@ -279,6 +369,93 @@ export default function Index() {
                 </p>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      <section id="servers" className="py-20 px-4 bg-card/30">
+        <div className="container mx-auto">
+          <h2 className="text-4xl md:text-5xl font-heading font-bold text-center mb-4 bg-gradient-to-r from-anime-purple to-anime-pink bg-clip-text text-transparent">
+            Наши серверы
+          </h2>
+          <p className="text-center text-muted-foreground mb-12 text-lg">Выбери сервер и присоединяйся к игре!</p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+            {servers.map((server) => (
+              <Card
+                key={server.id}
+                className={`border-2 transition-all hover:scale-[1.02] ${
+                  server.status === 'online'
+                    ? 'hover:border-anime-purple'
+                    : server.status === 'full'
+                    ? 'border-anime-orange'
+                    : 'opacity-60'
+                }`}
+              >
+                <CardHeader>
+                  <div className="flex items-start justify-between gap-2">
+                    <CardTitle className="text-lg leading-tight">{server.name}</CardTitle>
+                    <Badge
+                      className={
+                        server.status === 'online'
+                          ? 'bg-anime-purple'
+                          : server.status === 'full'
+                          ? 'bg-anime-orange'
+                          : 'bg-muted'
+                      }
+                    >
+                      {server.status === 'online' ? 'Онлайн' : server.status === 'full' ? 'Заполнен' : 'Оффлайн'}
+                    </Badge>
+                  </div>
+                  <CardDescription className="space-y-2 pt-2">
+                    <div className="flex items-center gap-2">
+                      <Icon name="Map" size={14} />
+                      <span className="font-mono text-xs">{server.map}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Icon name="Users" size={14} />
+                        <span className="text-sm">
+                          {server.players}/{server.maxPlayers}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Icon name="Wifi" size={14} />
+                        <span className="text-sm">{server.ping}ms</span>
+                      </div>
+                    </div>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
+                    <span className="text-xs text-muted-foreground">Режим:</span>
+                    <Badge variant="outline" className="text-xs">
+                      {server.mode}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
+                    <span className="text-xs text-muted-foreground font-mono">{server.ip}</span>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleCopyIP(server.ip)}
+                      className="h-6 px-2"
+                    >
+                      <Icon name="Copy" size={14} />
+                    </Button>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => handleConnectServer(server.ip)}
+                      disabled={server.status === 'offline'}
+                      className="flex-1 bg-gradient-to-r from-anime-purple to-anime-pink hover:opacity-90 disabled:opacity-50"
+                    >
+                      <Icon name="Gamepad2" size={16} />
+                      {server.status === 'full' ? 'Присоединиться' : 'Играть'}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
