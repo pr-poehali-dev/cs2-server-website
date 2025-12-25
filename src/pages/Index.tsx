@@ -5,6 +5,9 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Icon from '@/components/ui/icon';
+import { PaymentButton } from '@/components/extensions/robokassa/PaymentButton';
+import type { CartItem } from '@/components/extensions/robokassa/useRobokassa';
+import func2url from '@/../backend/func2url.json';
 
 interface SteamUser {
   steamId: string;
@@ -73,21 +76,27 @@ export default function Index() {
 
   const donatePackages = [
     {
+      id: 'starter',
       name: 'Starter',
-      price: '199₽',
+      price: 199,
+      priceDisplay: '199₽',
       features: ['Уникальный префикс', 'Доступ к VIP оружию', '2x опыта на 7 дней'],
       color: 'from-anime-purple to-anime-blue',
     },
     {
+      id: 'premium',
       name: 'Premium',
-      price: '499₽',
+      price: 499,
+      priceDisplay: '499₽',
       features: ['Все из Starter', 'Приоритет подключения', 'Эксклюзивные скины', '3x опыта на 30 дней'],
       color: 'from-anime-pink to-anime-purple',
       popular: true,
     },
     {
+      id: 'elite',
       name: 'Elite',
-      price: '999₽',
+      price: 999,
+      priceDisplay: '999₽',
       features: ['Все из Premium', 'Личный статус', 'Доступ к секретным картам', '5x опыта навсегда'],
       color: 'from-anime-orange to-anime-pink',
     },
@@ -514,7 +523,7 @@ export default function Index() {
                   </div>
                   <CardTitle className="text-center text-2xl">{pkg.name}</CardTitle>
                   <CardDescription className="text-center">
-                    <span className="text-4xl font-heading font-bold text-foreground">{pkg.price}</span>
+                    <span className="text-4xl font-heading font-bold text-foreground">{pkg.priceDisplay}</span>
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -526,7 +535,40 @@ export default function Index() {
                       </li>
                     ))}
                   </ul>
-                  <Button className={`w-full bg-gradient-to-r ${pkg.color} hover:opacity-90`}>Купить</Button>
+                  {user ? (
+                    <PaymentButton
+                      apiUrl={func2url['robokassa-robokassa']}
+                      amount={pkg.price}
+                      userName={user.username}
+                      userEmail={`${user.steamId}@steam.local`}
+                      userPhone="+70000000000"
+                      cartItems={[
+                        {
+                          id: pkg.id,
+                          name: `Донат-пакет ${pkg.name}`,
+                          price: pkg.price,
+                          quantity: 1,
+                        } as CartItem,
+                      ]}
+                      successUrl={window.location.origin + '/?payment=success'}
+                      failUrl={window.location.origin + '/?payment=failed'}
+                      onSuccess={(orderNumber) => {
+                        alert(`Оплата успешна! Номер заказа: ${orderNumber}`);
+                      }}
+                      onError={(error) => {
+                        alert(`Ошибка оплаты: ${error.message}`);
+                      }}
+                      buttonText="Купить"
+                      className={`w-full h-10 rounded-lg bg-gradient-to-r ${pkg.color} hover:opacity-90 text-white font-semibold transition-all`}
+                    />
+                  ) : (
+                    <Button 
+                      onClick={() => setIsAuthOpen(true)}
+                      className={`w-full bg-gradient-to-r ${pkg.color} hover:opacity-90`}
+                    >
+                      Войти для покупки
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             ))}
