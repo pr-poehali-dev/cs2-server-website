@@ -190,9 +190,7 @@ export default function Index() {
       <section id="home" className="pt-32 pb-20 px-4">
         <div className="container mx-auto text-center">
           <div className="animate-fade-in">
-            <h1 className="text-5xl md:text-7xl font-heading font-bold mb-6 bg-gradient-to-r from-anime-purple via-anime-pink to-anime-orange bg-clip-text text-transparent animate-gradient">
-              CS2 ANIME SERVER
-            </h1>
+            <h1 className="text-5xl md:text-7xl font-heading font-bold mb-6 bg-gradient-to-r from-anime-purple via-anime-pink to-anime-orange bg-clip-text text-transparent animate-gradient">COMEBACK CS2</h1>
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Погрузись в мир аниме-стилистики Counter-Strike 2. Уникальные режимы, крутое комьюнити и масса фана!
             </p>

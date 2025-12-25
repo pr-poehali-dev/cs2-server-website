@@ -45,9 +45,7 @@ export default function Navigation({
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-anime-purple to-anime-pink flex items-center justify-center text-2xl">
               ⚡
             </div>
-            <span className="text-2xl font-heading font-bold bg-gradient-to-r from-anime-purple via-anime-pink to-anime-orange bg-clip-text text-transparent">
-              CS2 ANIME
-            </span>
+            <span className="font-heading font-bold bg-gradient-to-r from-anime-purple via-anime-pink to-anime-orange bg-clip-text text-transparent mx-0 text-2xl">CS2 COMEBACK </span>
           </div>
           <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
